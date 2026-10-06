@@ -1,48 +1,52 @@
 import type { CSSProperties, ReactNode } from 'react'
 import { SITE } from '../content/site'
-import { Discord, Play } from './Icons'
+import { Arrow } from './Icons'
 
-export function SectionHeader({
-  kicker,
+/** Act header: large faint number, mono label, condensed title. */
+export function ActHeader({
+  number,
+  label,
   title,
-  sub,
+  lede,
   align = 'left',
-  id,
+  className = '',
 }: {
-  kicker: string
+  number: string
+  label: string
   title: ReactNode
-  sub?: ReactNode
-  align?: 'left' | 'center'
-  id?: string
+  lede?: ReactNode
+  align?: 'left' | 'right' | 'center'
+  className?: string
 }) {
-  const center = align === 'center'
+  const alignCls = align === 'center' ? 'mx-auto text-center items-center' : align === 'right' ? 'ml-auto text-left' : ''
   return (
-    <header className={`mb-10 md:mb-14 ${center ? 'mx-auto max-w-3xl text-center' : 'max-w-2xl'}`} data-reveal>
-      <div className={`flex items-center gap-3 ${center ? 'justify-center' : ''}`}>
-        <span className="h-px w-8 bg-holo" />
-        <span className="kicker">{kicker}</span>
-      </div>
-      <h2 id={id} className="display metal-text mt-4 text-[clamp(2.1rem,5.5vw,4.4rem)] font-bold">
-        {title}
-      </h2>
-      {sub && <p className="mt-5 text-base leading-relaxed text-steel md:text-lg">{sub}</p>}
+    <header className={`relative flex max-w-2xl flex-col ${alignCls} ${className}`} data-reveal>
+      <span className={`act-number absolute -top-10 ${align === 'right' ? 'right-0' : '-left-2'} md:-top-16`} aria-hidden>
+        {number}
+      </span>
+      <p className="label relative">
+        <span className="label-blue">{number}</span> // {label}
+      </p>
+      <h2 className="display title-glow relative mt-5 text-[clamp(2.2rem,4.6vw,3.9rem)] text-ink">{title}</h2>
+      {lede && <p className="lede relative mt-5 max-w-xl">{lede}</p>}
     </header>
   )
 }
 
-export function Panel({
-  children,
-  className = '',
-  accent,
-  style,
-}: {
-  children: ReactNode
-  className?: string
-  accent?: string
-  style?: CSSProperties
-}) {
+/** Mono data line such as "SECTOR // OUTER RIM". */
+export function Data({ k, v, className = '' }: { k: string; v: ReactNode; className?: string }) {
   return (
-    <div className={`holo ${className}`} style={{ ...(accent ? ({ '--accent': accent } as CSSProperties) : {}), ...style }}>
+    <p className={`label flex gap-2 ${className}`}>
+      <span className="text-steel/70">{k}</span>
+      <span className="text-steel/50">//</span>
+      <span className="text-ink/85">{v}</span>
+    </p>
+  )
+}
+
+export function Panel({ children, className = '', solid, tick, style }: { children: ReactNode; className?: string; solid?: boolean; tick?: boolean; style?: CSSProperties }) {
+  return (
+    <div className={`panel ${solid ? 'panel-solid' : ''} ${tick ? 'tick' : ''} ${className}`} style={style}>
       {children}
     </div>
   )
@@ -51,7 +55,7 @@ export function Panel({
 export function DiscordButton({ className = '', label = 'Join the Community' }: { className?: string; label?: string }) {
   return (
     <a href={SITE.discordUrl} target="_blank" rel="noreferrer" className={`btn btn-primary ${className}`}>
-      <Discord /> {label}
+      {label}
     </a>
   )
 }
@@ -59,58 +63,56 @@ export function DiscordButton({ className = '', label = 'Join the Community' }: 
 export function PlayButton({ className = '', label = 'Play Now' }: { className?: string; label?: string }) {
   return (
     <a href={SITE.playUrl} className={`btn btn-red ${className}`}>
-      <Play /> {label}
+      {label}
     </a>
   )
 }
 
-export function Chip({ children, color }: { children: ReactNode; color?: string }) {
+export function TextLink({ href, children }: { href: string; children: ReactNode }) {
   return (
-    <span
-      className="hud inline-flex items-center gap-2 rounded-sm border border-white/10 bg-white/5 px-2.5 py-1 text-[0.64rem] text-ink/85"
-      style={color ? { borderColor: `${color}55` } : undefined}
-    >
-      {color && <span className="h-1.5 w-1.5 rounded-full" style={{ background: color, boxShadow: `0 0 8px ${color}` }} />}
-      {children}
-    </span>
+    <a href={href} className="label label-blue inline-flex items-center gap-2 transition hover:text-ink">
+      {children} <Arrow width={14} height={14} />
+    </a>
   )
 }
 
-/** Placeholder for screenshots and clips. Pass `src` once real media exists. */
-export function MediaSlot({
+/** Placeholder for promotional captures. Pass `src` once real media exists. */
+export function Frame({
   hue = 210,
   label,
   video,
   src,
   className = '',
+  caption,
 }: {
   hue?: number
   label: string
   video?: boolean
   src?: string
   className?: string
+  caption?: string
 }) {
-  if (src) {
-    return video ? (
-      <video className={`h-full w-full object-cover ${className}`} src={src} autoPlay muted loop playsInline />
+  const media = src ? (
+    video ? (
+      <video className="h-full w-full object-cover" src={src} autoPlay muted loop playsInline />
     ) : (
-      <img className={`h-full w-full object-cover ${className}`} src={src} alt={label} loading="lazy" />
+      <img className="h-full w-full object-cover" src={src} alt={label} loading="lazy" />
     )
-  }
-  return (
-    <div className={`media-slot scanlines relative flex h-full w-full items-end overflow-hidden ${className}`} style={{ '--h': hue } as CSSProperties}>
-      <div className="absolute inset-0 grid-bg opacity-60" />
-      <div className="absolute left-3 top-3 hud flex items-center gap-2 text-[0.6rem] text-white/70">
-        <span className="pulse-dot text-sep" /> {video ? 'Clip slot' : 'Screenshot slot'}
-      </div>
-      {video && (
-        <div className="absolute inset-0 grid place-items-center">
-          <span className="grid h-14 w-14 place-items-center rounded-full border border-white/30 bg-black/30 backdrop-blur">
-            <Play />
-          </span>
-        </div>
-      )}
-      <p className="relative z-10 p-3 font-ui text-sm font-semibold uppercase tracking-widest text-white/90">{label}</p>
+  ) : (
+    <div className="frame-slot h-full w-full" style={{ '--h': hue } as CSSProperties}>
+      <div className="absolute inset-0 grid-fine" />
+      <p className="label absolute left-4 top-4 text-[0.6rem]">
+        {video ? 'Capture // clip pending' : 'Capture // still pending'}
+      </p>
     </div>
+  )
+  return (
+    <figure className={`relative overflow-hidden border border-line ${className}`}>
+      {media}
+      <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 bg-gradient-to-t from-space/90 to-transparent p-4">
+        <span className="display text-base text-ink">{label}</span>
+        {caption && <span className="label text-[0.58rem]">{caption}</span>}
+      </figcaption>
+    </figure>
   )
 }

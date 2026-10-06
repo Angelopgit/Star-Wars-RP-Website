@@ -1,53 +1,43 @@
-import { BATTALIONS } from '../content/factions'
-import { DISCLAIMER_SHORT, SITE } from '../content/site'
-import { Arrow, Down } from '../components/Icons'
-import { DiscordButton, PlayButton } from '../components/ui'
+import { SITE } from '../content/site'
+import { Data, DiscordButton, PlayButton } from '../components/ui'
+import { HeroMedia } from '../components/Backdrop'
 
-export function Hero() {
+export function Hero({ reduced }: { reduced: boolean }) {
   return (
-    <section id="top" data-shot="hero" className="relative z-[1] flex min-h-[100svh] flex-col justify-between pb-24 pt-[calc(var(--nav-h)+2rem)] sm:pb-10">
-      <div className="container-x flex flex-1 flex-col justify-start pt-[6vh] md:justify-center md:pt-0">
-        <div className="max-w-3xl text-center md:text-left">
-          <p className="hero-in hud flex items-center justify-center gap-3 text-holo md:justify-start">
-            <span className="pulse-dot text-sep" />
-            Incoming transmission · {SITE.community}
+    <section id="top" className="act flex min-h-[100svh] flex-col justify-end overflow-hidden pb-24 pt-[calc(var(--nav-h)+2rem)] sm:justify-center sm:pb-0">
+      <HeroMedia reduced={reduced} />
+      <div className="pointer-events-none absolute inset-0 scrim-l hidden md:block" />
+      <div className="container-x relative">
+        <div className="max-w-xl">
+          <p className="hero-in label">
+            <span className="label-blue">Transmission</span> // Squad Gaming Network
           </p>
-          <h1 className="display mt-5 font-extrabold">
-            <span className="hero-in block text-[clamp(1.1rem,2.6vw,1.6rem)] tracking-[0.5em] text-steel">Enter the</span>
-            <span className="hero-in metal-text text-glow block text-[clamp(2.9rem,9.5vw,7.6rem)]">Galactic</span>
-            <span className="hero-in metal-text text-glow block text-[clamp(2.9rem,9.5vw,7.6rem)]">Republic</span>
+          <h1 className="hero-in mt-7">
+            <span className="display-light block text-[clamp(1rem,1.6vw,1.25rem)] text-ink/70">Enter the</span>
+            <span className="display title-glow mt-2 block text-[clamp(2.9rem,6.4vw,5.6rem)] text-ink">Galactic Republic</span>
           </h1>
-          <p className="hero-in mx-auto mt-6 max-w-xl text-lg text-ink/90 md:mx-0 md:text-xl">
-            A new generation of Star Wars Roleplay, built in S&amp;box.
+          <p className="hero-in lede mt-6 max-w-md">A new generation of Star Wars Roleplay, built in S&amp;box.</p>
+          <p className="hero-in display-light mt-6 text-[0.8rem] leading-[1.9] text-steel">
+            Choose your allegiance.
+            <br />
+            Forge your story.
+            <br />
+            Fight for the galaxy.
           </p>
-          <p className="hero-in hud mt-3 text-[0.72rem] text-steel md:text-xs">Choose your allegiance. Forge your story. Fight for the galaxy.</p>
-
-          <div className="hero-in mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center md:justify-start">
+          <div className="hero-in mt-9 flex flex-col gap-3 sm:flex-row">
             <DiscordButton />
-            <PlayButton label="Play Now / Connect" />
-            <a href="#about" className="btn btn-ghost">
-              Learn More <Arrow width={16} height={16} />
-            </a>
+            <PlayButton />
           </div>
-          <p className="hero-in mt-6 text-[0.7rem] text-steel/80">{DISCLAIMER_SHORT}</p>
         </div>
-      </div>
 
-      <div className="container-x relative hidden items-end justify-between gap-6 md:flex">
-        <div className="hero-in holo scanlines hud flex flex-wrap items-center gap-x-5 gap-y-2 px-4 py-3 text-[0.62rem] text-steel">
-          <span className="text-holo">Battalions deployed</span>
-          {BATTALIONS.map((b) => (
-            <span key={b.name} className="flex items-center gap-2">
-              <span className="h-2 w-2" style={{ background: b.color, boxShadow: `0 0 10px ${b.color}` }} />
-              {b.name}
-            </span>
-          ))}
+        <div className="hero-in mt-14 hidden gap-x-10 gap-y-2 border-t border-line pt-5 md:flex md:flex-wrap">
+          <Data k="Status" v={<span className="inline-flex items-center gap-2 text-blue"><span className="status-dot" /> Active development</span>} />
+          <Data k="Sector" v="Outer Rim" />
+          <Data k="Operator" v={SITE.community} />
+          <Data k="Platform" v="S&box" />
         </div>
-        <a href="#about" className="hud scroll-cue flex flex-col items-center gap-1 text-[0.6rem] text-steel" aria-label="Scroll to begin">
-          Scroll to deploy
-          <Down />
-        </a>
       </div>
+      <p className="label absolute bottom-6 left-0 right-0 hidden text-center text-[0.58rem] text-steel/50 md:block">Scroll</p>
     </section>
   )
 }

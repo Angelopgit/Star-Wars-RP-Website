@@ -6,7 +6,7 @@ export const SITE = {
   discordUrl: 'https://discord.gg/your-invite', // TODO: real Discord invite
   // S&box connect link or server page. TODO: replace once the server is public.
   playUrl: '#how-to-play',
-  rulesUrl: '#philosophy',
+  rulesUrl: '#orders',
 }
 
 export const DISCLAIMER_SHORT =
@@ -16,7 +16,7 @@ export const DISCLAIMER_FULL =
   'This is an unofficial, non-profit FAN PROJECT and FAN WEBSITE made by Squad Gaming Community purely for fun and entertainment. ' +
   'It is not affiliated with, endorsed by, sponsored by, or approved by Lucasfilm Ltd., The Walt Disney Company, or Facepunch Studios. ' +
   'Star Wars and all related names, characters, and marks are trademarks of Lucasfilm Ltd. and/or Disney. S&box is a trademark of Facepunch Studios. ' +
-  'No money is made from this project, nothing is sold, and all 3D visuals on this site are original stylized artwork.'
+  'No money is made from this project, nothing is sold, and all visuals on this site are original stylized artwork.'
 
 export type NavGroup = { label: string; href: string; items?: { label: string; href: string }[] }
 
@@ -27,7 +27,7 @@ export const NAV: NavGroup[] = [
     href: '#about',
     items: [
       { label: 'Our Vision', href: '#about' },
-      { label: 'Roleplay', href: '#philosophy' },
+      { label: 'Roleplay', href: '#orders' },
       { label: 'Features', href: '#features' },
     ],
   },
@@ -46,7 +46,7 @@ export const NAV: NavGroup[] = [
     items: [
       { label: 'Getting Started', href: '#how-to-play' },
       { label: 'Character Creation', href: '#character' },
-      { label: 'Rules', href: '#philosophy' },
+      { label: 'Rules', href: '#orders' },
     ],
   },
   {

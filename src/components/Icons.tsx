@@ -84,12 +84,12 @@ export const Calendar = (p: P) => (
   </svg>
 )
 
-/** Original emblem for the site (not a canon faction symbol). */
+/** Original emblem for the site (not a canon faction symbol): a thin reticle with a four-point star. */
 export const Emblem = (p: P) => (
-  <svg viewBox="0 0 64 64" width={36} height={36} aria-hidden {...p}>
-    <circle cx="32" cy="32" r="27" fill="none" stroke="currentColor" strokeWidth="2.5" />
-    <circle cx="32" cy="32" r="20" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.5" />
-    <path d="M32 9 L36 27 L55 32 L36 37 L32 55 L28 37 L9 32 L28 27 Z" fill="currentColor" />
-    <circle cx="32" cy="32" r="4" fill="#d6313b" />
+  <svg viewBox="0 0 64 64" width={28} height={28} aria-hidden {...p}>
+    <circle cx="32" cy="32" r="26" fill="none" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M32 6v10M32 48v10M6 32h10M48 32h10" stroke="currentColor" strokeWidth="1" opacity="0.6" />
+    <path d="M32 20l3.5 8.5L44 32l-8.5 3.5L32 44l-3.5-8.5L20 32l8.5-3.5z" fill="currentColor" />
+    <circle cx="32" cy="32" r="2.4" fill="#c9363e" />
   </svg>
 )

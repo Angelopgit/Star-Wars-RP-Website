@@ -1,21 +1,22 @@
 import type { ReactNode } from 'react'
 import { PLANETS, type Planet } from '../content/planets'
 import { selectedPlanet, usePlanetId } from '../lib/hooks'
-import { Panel, SectionHeader } from '../components/ui'
+import { ActHeader, Data, Panel } from '../components/ui'
+import { Backdrop } from '../components/Backdrop'
 
 const STATUS_COLOR: Record<Planet['status'], string> = {
-  Secure: '#5cc8ff',
-  Contested: '#ffc457',
-  'Under Siege': '#ff5a4f',
-  Neutral: '#a9b6c8',
-  Occupied: '#9b8cff',
+  Secure: '#4ba9d8',
+  Contested: '#d8b05a',
+  'Under Siege': '#c9363e',
+  Neutral: '#7c8996',
+  Occupied: '#9a8cd8',
 }
 
 function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div>
-      <h4 className="hud text-[0.58rem] text-steel">{label}</h4>
-      <div className="mt-1.5 text-sm text-ink/85">{children}</div>
+    <div className="border-t border-line pt-3">
+      <p className="label">{label}</p>
+      <div className="mt-1.5 text-[0.95rem] text-ink/85">{children}</div>
     </div>
   )
 }
@@ -25,15 +26,14 @@ export function Galaxy() {
   const p = PLANETS.find((x) => x.id === id) ?? PLANETS[0]
   const sc = STATUS_COLOR[p.status]
   return (
-    <section id="galaxy" data-shot="galaxy" className="section">
-      <div className="container-x">
-        <SectionHeader
-          kicker="The galaxy"
-          title="A living galaxy at war"
-          sub="Every world has its own situation, factions, and conflicts. What happens on one planet ripples across the map."
-        />
-        <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[260px_minmax(0,520px)]">
-          <div className="no-scrollbar -mx-4 flex min-w-0 gap-2 overflow-x-auto px-4 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0" role="tablist" aria-label="Planets">
+    <section id="galaxy" className="act min-h-[100svh] overflow-hidden pt-32 md:pt-48">
+      <Backdrop name="galaxy" position="70% 45%" opacity={0.5} className="hidden md:block" />
+      <div className="pointer-events-none absolute inset-0 scrim-l hidden md:block" />
+      <div className="container-x relative">
+        <ActHeader number="03" label="A living galaxy" title="A galaxy at war. Every world has a situation." lede="What happens on one planet ripples across the map. Select a world to see its current state." />
+
+        <div className="mt-14 grid gap-8 lg:grid-cols-12">
+          <div className="no-scrollbar -mx-5 flex min-w-0 gap-px overflow-x-auto px-5 lg:col-span-3 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0" role="tablist" aria-label="Planets">
             {PLANETS.map((x) => {
               const active = x.id === p.id
               return (
@@ -42,48 +42,34 @@ export function Galaxy() {
                   role="tab"
                   aria-selected={active}
                   onClick={() => selectedPlanet.set(x.id)}
-                  className={`flex shrink-0 items-center gap-3 border px-4 py-3 text-left transition ${
-                    active ? 'border-holo/60 bg-holo/10' : 'border-white/10 bg-space/50 hover:border-white/30'
+                  className={`flex shrink-0 items-center justify-between gap-4 border-l px-4 py-3 text-left transition lg:w-full ${
+                    active ? 'border-blue bg-panel/80' : 'border-line bg-space/60 hover:bg-deep/80'
                   }`}
                 >
-                  <span
-                    className="h-6 w-6 shrink-0 rounded-full"
-                    style={{ background: `radial-gradient(circle at 35% 35%, ${x.colors[2]}, ${x.colors[1]} 45%, ${x.colors[0]})`, boxShadow: `0 0 12px ${x.atmosphere}66` }}
-                  />
-                  <span>
-                    <span className="display block text-base font-bold">{x.name}</span>
-                    <span className="hud block text-[0.55rem]" style={{ color: STATUS_COLOR[x.status] }}>
-                      {x.status}
-                    </span>
+                  <span className="display text-xl text-ink">{x.name}</span>
+                  <span className="label text-[0.56rem]" style={{ color: STATUS_COLOR[x.status] }}>
+                    {x.status}
                   </span>
                 </button>
               )
             })}
           </div>
 
-          <Panel className="scanlines p-6 md:p-8" accent={sc} key={p.id}>
+          <Panel key={p.id} tick className="p-7 md:p-9 lg:col-span-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="hud text-[0.6rem] text-steel">{p.region}</p>
-              <span className="hud flex items-center gap-2 text-[0.6rem]" style={{ color: sc }}>
-                <span className="pulse-dot" /> {p.status}
-              </span>
+              <Data k="Sector" v={p.region} />
+              <p className="label flex items-center gap-2" style={{ color: sc }}>
+                <span className="status-dot" /> {p.status}
+              </p>
             </div>
-            <h3 className="display metal-text mt-2 break-words text-4xl font-extrabold sm:text-5xl md:text-6xl">{p.name}</h3>
-            <p className="mt-3 text-ink/85">{p.description}</p>
-            <div className="mt-6 grid gap-5 sm:grid-cols-2">
+            <h3 className="display title-glow mt-5 break-words text-[clamp(2.4rem,5vw,4.2rem)] text-ink">{p.name}</h3>
+            <p className="lede mt-4">{p.description}</p>
+            <div className="mt-8 grid gap-6 sm:grid-cols-2">
               <Field label="Current situation">{p.situation}</Field>
               <Field label="Current conflict">{p.conflict}</Field>
               <Field label="Factions present">{p.factions.join(' · ')}</Field>
               <Field label="Available roles">{p.roles.join(' · ')}</Field>
-              <Field label="Important locations">
-                <ul className="flex flex-wrap gap-1.5">
-                  {p.locations.map((l) => (
-                    <li key={l} className="border border-white/10 px-2 py-0.5 text-xs">
-                      {l}
-                    </li>
-                  ))}
-                </ul>
-              </Field>
+              <Field label="Key locations">{p.locations.join(' · ')}</Field>
               <Field label="Active event">
                 <span style={{ color: sc }}>{p.event}</span>
               </Field>

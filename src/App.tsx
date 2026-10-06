@@ -1,31 +1,22 @@
-import { lazy, Suspense, useEffect } from 'react'
+import { useEffect } from 'react'
 import Lenis from 'lenis'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { MobileActionBar, Nav } from './components/Nav'
-import { useIsMobile, useReducedMotion } from './lib/hooks'
-import { measureAnchors } from './lib/scroll'
-import { About } from './sections/About'
-import { Character, Progression } from './sections/Character'
-import { Community, Philosophy } from './sections/Community'
-import { Media, News, Roadmap } from './sections/Development'
-import { Factions } from './sections/Factions'
-import { Events, Features } from './sections/Features'
-import { Galaxy } from './sections/Galaxy'
+import { useReducedMotion } from './lib/hooks'
 import { Hero } from './sections/Hero'
-import { Footer, HowToPlay, WhyUs } from './sections/Play'
-import { StaticBackdrop } from './components/StaticBackdrop'
+import { Project } from './sections/Project'
+import { Allegiance } from './sections/Allegiance'
+import { Galaxy } from './sections/Galaxy'
+import { Story } from './sections/Story'
+import { Conflict } from './sections/Conflict'
+import { Footer, Ranks } from './sections/Ranks'
 
 gsap.registerPlugin(ScrollTrigger)
-const Experience = lazy(() => import('./scene/Experience'))
 
 function useCinematicScroll(reduced: boolean) {
   useEffect(() => {
-    measureAnchors()
-    const ro = new ResizeObserver(() => {
-      measureAnchors()
-      ScrollTrigger.refresh()
-    })
+    const ro = new ResizeObserver(() => ScrollTrigger.refresh())
     ro.observe(document.body)
 
     let lenis: Lenis | null = null
@@ -38,7 +29,7 @@ function useCinematicScroll(reduced: boolean) {
       gsap.ticker.lagSmoothing(0)
     }
 
-    // In-page links glide through the scene instead of jumping.
+    // In-page links glide instead of jumping.
     const onClick = (e: MouseEvent) => {
       const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"]')
       if (!a) return
@@ -46,7 +37,7 @@ function useCinematicScroll(reduced: boolean) {
       const target = hash === '#top' ? document.body : document.querySelector(hash)
       if (!target) return
       e.preventDefault()
-      if (lenis) lenis.scrollTo(target as HTMLElement, { offset: hash === '#top' ? 0 : -60, duration: 1.8 })
+      if (lenis) lenis.scrollTo(target as HTMLElement, { offset: hash === '#top' ? 0 : -60, duration: 1.6 })
       else (target as HTMLElement).scrollIntoView()
       history.replaceState(null, '', hash)
     }
@@ -54,20 +45,25 @@ function useCinematicScroll(reduced: boolean) {
 
     const ctx = gsap.context(() => {
       if (reduced) return
-      gsap.from('.hero-in', { y: 30, opacity: 0, duration: 1.2, ease: 'power3.out', stagger: 0.09, delay: 0.3 })
+      gsap.from('.hero-in', { y: 24, opacity: 0, duration: 1.4, ease: 'power3.out', stagger: 0.1, delay: 0.4 })
       gsap.set('[data-reveal]', { opacity: 0 })
       ScrollTrigger.batch('[data-reveal]', {
         start: 'top 88%',
         once: true,
-        onEnter: (els) => gsap.fromTo(els, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out', stagger: 0.08, overwrite: true }),
+        onEnter: (els) => gsap.fromTo(els, { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, ease: 'power3.out', stagger: 0.08, overwrite: true }),
       })
       gsap.fromTo(
         '.roadmap-progress',
         { scaleX: 0, scaleY: 0, transformOrigin: 'left top' },
         { scaleX: 1, scaleY: 1, ease: 'none', scrollTrigger: { trigger: '#roadmap', start: 'top 70%', end: 'center center', scrub: true } },
       )
-      // Hero content drifts away as the camera pulls out.
-      gsap.to('#top .container-x', { yPercent: -25, opacity: 0, ease: 'none', scrollTrigger: { trigger: '#top', start: 'top top', end: 'bottom top', scrub: true } })
+      // The hero copy lifts away and the footage settles as the page takes over.
+      gsap.to('#top .container-x', { yPercent: -18, opacity: 0, ease: 'none', scrollTrigger: { trigger: '#top', start: 'top top', end: 'bottom top', scrub: true } })
+      gsap.to('#top .hero-media', { yPercent: 18, ease: 'none', scrollTrigger: { trigger: '#top', start: 'top top', end: 'bottom top', scrub: true } })
+      // Section stills drift slower than the page, like plates in a camera move.
+      gsap.utils.toArray<HTMLElement>('.backdrop img[data-parallax]').forEach((img) => {
+        gsap.fromTo(img, { yPercent: -7 }, { yPercent: 7, ease: 'none', scrollTrigger: { trigger: img.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } })
+      })
     })
 
     return () => {
@@ -82,34 +78,23 @@ function useCinematicScroll(reduced: boolean) {
 
 export default function App() {
   const reduced = useReducedMotion()
-  const mobile = useIsMobile()
   useCinematicScroll(reduced)
 
   return (
     <>
-      <Suspense fallback={<div className="scene-layer"><StaticBackdrop /></div>}>
-        <Experience mobile={mobile} reduced={reduced} />
-      </Suspense>
       <Nav />
       <main>
-        <Hero />
-        <About />
-        <Factions />
-        <Character />
-        <Progression />
+        <Hero reduced={reduced} />
+        <Project />
+        <Allegiance />
         <Galaxy />
-        <Features />
-        <Events />
-        <Philosophy />
-        <Community />
-        <Roadmap />
-        <Media />
-        <News />
-        <HowToPlay />
-        <WhyUs />
+        <Story />
+        <Conflict />
+        <Ranks />
       </main>
       <Footer />
       <MobileActionBar />
+      <div className="film-grain" aria-hidden />
     </>
   )
 }

@@ -1,0 +1,138 @@
+export type Planet = {
+  id: string
+  name: string
+  region: string
+  status: 'Secure' | 'Contested' | 'Under Siege' | 'Neutral' | 'Occupied'
+  colors: [string, string, string]
+  atmosphere: string
+  description: string
+  situation: string
+  factions: string[]
+  roles: string[]
+  locations: string[]
+  conflict: string
+  event: string
+}
+
+export const PLANETS: Planet[] = [
+  {
+    id: 'coruscant',
+    name: 'Coruscant',
+    region: 'Core Worlds',
+    status: 'Secure',
+    colors: ['#1b2a4a', '#f0b25a', '#3a4d73'],
+    atmosphere: '#7fb4ff',
+    description: 'The city-planet heart of the Republic. Senate halls above, the underworld far below.',
+    situation: 'Heightened security after an attempted bombing in the Senate district.',
+    factions: ['Republic', 'Civilian', 'Criminal'],
+    roles: ['Coruscant Guard', 'Senate staff', 'Jedi', 'Underworld'],
+    locations: ['Senate District', 'Jedi Temple', 'Lower Levels', '79s Cantina'],
+    conflict: 'Separatist sleeper cells in the lower levels.',
+    event: 'Lockdown patrols, Tuesday',
+  },
+  {
+    id: 'kamino',
+    name: 'Kamino',
+    region: 'Wild Space',
+    status: 'Secure',
+    colors: ['#0d2a3a', '#4fa0b8', '#d8eef4'],
+    atmosphere: '#8fe0ff',
+    description: 'An ocean world of endless storms, where every clone begins their story.',
+    situation: 'Recruit intake and training at full capacity.',
+    factions: ['Republic'],
+    roles: ['Recruits', 'Training Officers', 'Medics'],
+    locations: ['Tipoca City', 'Training Grounds', 'Barracks'],
+    conflict: 'Rumors of a Separatist probe beyond the storm line.',
+    event: 'Recruit graduation, weekly',
+  },
+  {
+    id: 'geonosis',
+    name: 'Geonosis',
+    region: 'Outer Rim',
+    status: 'Contested',
+    colors: ['#5a2414', '#c4653a', '#e8a46a'],
+    atmosphere: '#ff9a6a',
+    description: 'Red deserts and droid foundries. Where the war began.',
+    situation: 'Foundries rebuilding beneath the surface.',
+    factions: ['Republic', 'Separatist'],
+    roles: ['Assault battalions', 'Engineers', 'Tactical droids'],
+    locations: ['Foundry Complex', 'Petranaki Arena', 'Spire Fields'],
+    conflict: 'Republic push to destroy the rebuilt foundries.',
+    event: 'Foundry raid, campaign event',
+  },
+  {
+    id: 'naboo',
+    name: 'Naboo',
+    region: 'Mid Rim',
+    status: 'Secure',
+    colors: ['#1f4a2a', '#4f9a5a', '#cfe8ff'],
+    atmosphere: '#a6dcff',
+    description: 'Green hills and royal cities. A peaceful world with powerful friends.',
+    situation: 'Diplomatic summit planned at the palace.',
+    factions: ['Republic', 'Civilian'],
+    roles: ['Diplomats', 'Royal Security', 'Traders'],
+    locations: ['Theed Palace', 'Lake Country', 'Spaceport'],
+    conflict: 'Assassination plots against visiting senators.',
+    event: 'Diplomatic escort, monthly',
+  },
+  {
+    id: 'tatooine',
+    name: 'Tatooine',
+    region: 'Outer Rim',
+    status: 'Neutral',
+    colors: ['#6a4a24', '#d8b070', '#f4dcb0'],
+    atmosphere: '#ffd59a',
+    description: 'Twin suns, sand, and scum. The Republic has little reach here.',
+    situation: 'Crime syndicates bidding for control of the spaceport.',
+    factions: ['Civilian', 'Criminal', 'Bounty Hunters'],
+    roles: ['Smugglers', 'Bounty Hunters', 'Merchants'],
+    locations: ['Mos Espa', 'Dune Sea', 'Cantina'],
+    conflict: 'Syndicate war over spice routes.',
+    event: 'Podrace night, weekly',
+  },
+  {
+    id: 'christophsis',
+    name: 'Christophsis',
+    region: 'Outer Rim',
+    status: 'Under Siege',
+    colors: ['#1a2a5a', '#6a8aff', '#d8e4ff'],
+    atmosphere: '#9ab8ff',
+    description: 'Crystal cities glittering under siege. The front line of the current campaign.',
+    situation: 'Separatist assault on Republic positions in progress.',
+    factions: ['Republic', 'Separatist'],
+    roles: ['Front-line battalions', 'Jedi', 'Droid army'],
+    locations: ['Crystal City', 'Command Post', 'Orbital Blockade'],
+    conflict: 'The Battle of Christophsis. Outcome undecided.',
+    event: 'Battle of Christophsis, LIVE',
+  },
+  {
+    id: 'felucia',
+    name: 'Felucia',
+    region: 'Outer Rim',
+    status: 'Contested',
+    colors: ['#3a1a4a', '#d0507a', '#f0c050'],
+    atmosphere: '#ff9ad8',
+    description: 'A fungal jungle world where the planet itself fights back.',
+    situation: 'Medical stations cut off by Separatist patrols.',
+    factions: ['Republic', 'Separatist', 'Civilian'],
+    roles: ['Medics', 'Scouts', 'Farmers'],
+    locations: ['Medical Station', 'Jungle Canopy', 'Farm Villages'],
+    conflict: 'Securing the medical station before reinforcements arrive.',
+    event: 'Rescue operation, campaign event',
+  },
+  {
+    id: 'mandalore',
+    name: 'Mandalore',
+    region: 'Outer Rim',
+    status: 'Neutral',
+    colors: ['#2a2a34', '#6a7488', '#c8d0dc'],
+    atmosphere: '#c0d0ff',
+    description: 'A neutral world of domed cities and warrior traditions held in a fragile peace.',
+    situation: 'Neutral government under pressure from radical clans.',
+    factions: ['Civilian', 'Independent'],
+    roles: ['Diplomats', 'Clan warriors', 'Traders'],
+    locations: ['Sundari', 'Wastelands', 'Royal Palace'],
+    conflict: 'Political unrest threatening neutrality.',
+    event: 'Neutral summit, seasonal',
+  },
+]
